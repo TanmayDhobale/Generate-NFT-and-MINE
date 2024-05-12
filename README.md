@@ -1,6 +1,7 @@
 # NFT-Prompt-Generator-Miner
 
-``` The deployed site will not work properly as I don't have a Third Web Engine subscription, so I can't mine, and there's no Dale3.0
+```
+ The deployed site will not work properly as I don't have a Third Web Engine subscription, so I can't mine, and there's no Dale3.0
 if u have all sub then clone and add in env and ur good to go , enjoy 
 ```
 
