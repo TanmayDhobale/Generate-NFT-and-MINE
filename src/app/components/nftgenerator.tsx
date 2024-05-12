@@ -1,90 +1,27 @@
-"use client";
-
-import React, { use, useState } from "react";
-import { ConnectButton, MediaRenderer, useActiveAccount } from "thirdweb/react";
 import { client } from "@/app/client";
+import { NFT } from "thirdweb";
+import { MediaRenderer } from "thirdweb/react";
 
-const nftgenerator = () => {
-  const account = useActiveAccount();
-  const [imageprompt, setImageprompt] = useState("");
-  const [generatedImage, setGeneratedImage] = useState("");
-  const [isGenerating, setIsGenerating] = useState(false);
-  const [isMining, setIsMining] = useState(false);
-
-  if (account) {
-    return (
-      <>
-        <div
-          className=" 
-text-5xl text-center text-white font-bold mt-10"
-        >
-          <ConnectButton client={client} />
-          <div>
-            {generatedImage ? (
-              <>
-                <MediaRenderer
-                  client={client}
-                  src={generatedImage}
-                  className="w-full h-auto mt-10"
-                />
-              </>
-            ) : (
-              <>
-                {" "}
-                <div
-                  className="
-   width:300px;
-    height:300px;
-    border:1px solid #000;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    border-radius:10px;
-    flex-direction:column;
-    
- "
-                >
-                  <p>
-                    {isGenerating
-                      ? "Generating NFT..."
-                      : "Click the button and write the prompt to generate NFT"}
-                  </p>
-                </div>
-              </>
-            )}
-          </div>
-          <div>
-          <form action="">
-          { ! isMining || ! isGenerating ? ( 
-          <>
-          <input type="text" placeholder=" enter a prompt " value={imageprompt}
-           onChange={(e)=> setGeneratedImage(e.target.value)} />
-           <button  className=" cursor-pointer
-              mt-10 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded
-           " type="submit" disabled={ isGenerating || isMining || !imageprompt} > 
-            {isGenerating ? "Generating NFT..."
-            : isMining ? "Mining..." 
-            : "Generate NFT and Mine"
-            }
-           </button>
-           </>
-          ) : (
-          <>
-         <button 
-            className=" cursor-pointer
-                mt-10 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-            onClick={()=> setGeneratedImage("")}
-        >
-            Generate Another NFT
-          </button>
-          </>
-          )}
-          </form>
-          </div>
-        </div>
-      </>
-    );
-  }
+type NFTCollectionProps = {
+    nfts: NFT[];
+    className?: string;
 };
 
-export default nftgenerator;
+export const NFTCollection = ({ nfts, className }: NFTCollectionProps) => {
+    return (
+        <div className={`flex flex-col items-center ${className}`}>
+            <h3 className="text-2xl font-bold mb-6 text-purple-600">AI Generations:</h3>
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 max-w-screen-lg">
+                {nfts.map((nft) => (
+                    <div key={nft.id} className="p-2 bg-white rounded-lg shadow-md overflow-hidden transition-all duration-300 hover:shadow-lg">
+                        <MediaRenderer
+                            client={client}
+                            src={nft.metadata.image}
+                            className="w-full h-auto object-cover object-center"
+                        />
+                    </div>
+                ))}
+            </div>
+        </div>
+    );
+};
